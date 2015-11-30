@@ -38,7 +38,8 @@
             padding-top: 20px;
             font: normal 14px Tahoma, Geneva, sans-serif;
         }
-        #results-info{
+
+        #results-info {
             margin: 10px 0;
         }
     </style>
@@ -122,11 +123,15 @@
         <div class="panel-body">
             <div>
                 <button id="startSearch" class="btn btn-primary" onclick="startSearch()">Запустить поиск</button>
-                <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты поиска</button>
+                <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты
+                    поиска
+                </button>
                 <button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>
             </div>
             <div id="results-info">
-                <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span></h3>
+                <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span>
+                </h3>
+
                 <p>Общее количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
             </div>
         </div>
@@ -148,8 +153,11 @@
 <script type="text/javascript" src="js/engine.js"></script>
 
 <script type="text/javascript">
+    var se = new SearchEngine();
+
     $(document).ready(function () {
         generateKeywordsContainers();
+        $("#keywords-container input[type='checkbox']:checked").prop("checked", false)
     });
 
     var g_keywords = [
@@ -176,8 +184,8 @@
         disableControls();
         $(document).ready(function () {
             var keywords = getKeywordsForSearch();
-            var se = new SearchEngine();
             se.findItemsForKeywords(keywords).done(function () {
+                removeDuplicates();
                 showFinishStatus();
                 enableControls();
                 console.log("FINISH");
@@ -185,24 +193,23 @@
         });
     }
 
-    function disableControls(){
+    function disableControls() {
         $("button").addClass("disabled");
         $("#keywords-container input[type=checkbox]").prop('disabled', true);
     }
 
-    function enableControls(){
+    function enableControls() {
         $("#removeResults").removeClass("disabled");
         $("#startSearch").removeClass("disabled");
         $("#keywords-container input[type=checkbox]").prop('disabled', false);
     }
 
 
-
-    function showProgressStatus(){
+    function showProgressStatus() {
         $("#search-status").html("Идет поиск").removeClass("label-primary").removeClass("label-success").addClass("label-danger");
     }
 
-    function showFinishStatus(){
+    function showFinishStatus() {
         $("#search-status").html("Поиск завершен").removeClass("label-primary").removeClass("label-danger").addClass("label-success");
     }
 
@@ -230,7 +237,7 @@
     }
 
     function generateKeywordContainer(keyword) {
-        var keywordWithoutSpace = (new SearchEngine()).getWordWithoutSpaces(keyword);
+        var keywordWithoutSpace = se.getWordWithoutSpaces(keyword);
 
         var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-3 col-md-3"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label></div></div><div class="col-xs-6 col-sm-9 col-md-9"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
         var html = convertStrToHTML("keywordWithoutSpaces", keywordWithoutSpace, htmlTemplate);
@@ -256,6 +263,31 @@
         var re = new RegExp(find, 'g');
         str = str.replace(re, val);
         return str;
+    }
+
+    function removeDuplicates() {
+        var ids = [];
+        var arrElements = $("#items-container .descriptTenderTd dt a");
+        $.each(arrElements, function (i, item) {
+            var str = $(item).html();
+            var regexp = new RegExp('[0-9]+', '');
+            var id = regexp.exec(str)[0];
+            ids.push(id);
+            //console.log($("#" + id));
+            $("#" + id).remove();
+            $(item).parents(".registerBox").attr("id", id);
+        });
+        se.refreshResultsCount();
+
+        /*console.log(ids);
+        console.log($.unique(ids));
+        for (var i = 0; i < ids.length; i++) {
+            for (var j = i + 1; j < ids.length; j++) {
+                if (ids[i] == ids[j]) {
+                    $("#" + ids[i])
+                }
+            }
+        }*/
     }
 </script>
 

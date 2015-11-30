@@ -59,12 +59,12 @@ function SearchEngine() {
     };
     this.refreshProgressBar = function (key, done, all) {
         var pbId = "#pb-" + this.getWordWithoutSpaces(key);
-        $(pbId).parent().css("display", "block")
+        $(pbId).parent().css("display", "block");
         $(pbId).css("width", (done / all * 100) + "%");
-    }
+    };
     this.getWordWithoutSpaces = function (keyword) {
         return keyword.replace(new RegExp(" ", 'g'), "_");
-    }
+    };
     this.refreshResultsCount = function () {
         var count = $("#items-container .registerBox").size();
         $("#full-items-count").html(count);
