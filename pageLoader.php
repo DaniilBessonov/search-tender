@@ -3,19 +3,21 @@ include_once "simple_html_dom.php";
 
 $key = isset($_GET['key']) ? $_GET['key'] : null;
 $page = isset($_GET['page']) ? $_GET['page'] : null;
+$region = isset($_GET['region']) ? $_GET['region'] : null;
 
-if ($key == null || $page == null) {
-    echo "Error in params<br> Key=$key <br>Page=$page";
+if ($key == null || $page == null || $region == null) {
+    echo "Error in params<br> Key=$key <br>Page=$page <br>Region=$region";
 } else {
-    echo getItemsByKey($key, $page);
+    echo getItemsByKey($key, $page, $region);
 
 }
 
-function getItemsByKey($key, $pageNumber)
+function getItemsByKey($key, $pageNumber, $region = 5277321)
 {
-    $page = loadPage($key, $pageNumber);
-    $result = "<!--{".getPageCount($page)."}-->";
+    $page = loadPage($key, $pageNumber, $region);
+    $result = "<!--{" . getPageCount($page) . "}-->";
     $result = $result . getItemContainer($page);
+    $result = str_replace('href="/epz/', 'href="http://zakupki.gov.ru/epz/', $result);
     return $result;
 }
 
@@ -27,11 +29,11 @@ function getItemContainer($page)
     return null;
 }
 
-function loadPage($key, $pageNumber)
+function loadPage($key, $pageNumber, $region)
 {
     $query = urlencode($key);
     //TODO VRN &regionIds=5277321 &regionIds=5277325&regionIds=5277326&regionIds=5277331
-    $url = "http://www.zakupki.gov.ru/epz/order/extendedsearch/search.html?sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_10&pageNo=$pageNumber&searchString=$query&placeOfSearch=FZ_44,FZ_223%2CFZ_223&searchType=ORDERS&morphology=true&strictEqual=false&orderPriceCurrencyId=-1&okdpWithSubElements=false&districtIds=5277317&orderStages=AF%2CCA&headAgencyWithSubElements=false&smallBusinessSubject=I&rnpData=I&executionRequirement=I&penalSystemAdvantage=I&disabilityOrganizationsAdvantage=I&russianGoodsPreferences=I&orderPriceCurrencyId=-1&okvedWithSubElements=false&jointPurchase=false&byRepresentativeCreated=false&selectedMatchingWordPlace223=NOTICE_AND_DOCS&matchingWordPlace94=NOTIFICATIONS&matchingWordPlace44=NOTIFICATIONS&searchAttachedFile=false&searchTextInAttachedFile=$query&changeParameters=true&showLotsInfo=false&extendedAttributeSearchCriteria.searchByAttributes=NOTIFICATION&law44.okpd.withSubElements=false&regionIds=5277321";
+    $url = "http://www.zakupki.gov.ru/epz/order/extendedsearch/search.html?sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_10&pageNo=$pageNumber&searchString=$query&placeOfSearch=FZ_44,FZ_223%2CFZ_223&searchType=ORDERS&morphology=true&strictEqual=false&orderPriceCurrencyId=-1&okdpWithSubElements=false&districtIds=5277317&orderStages=AF%2CCA&headAgencyWithSubElements=false&smallBusinessSubject=I&rnpData=I&executionRequirement=I&penalSystemAdvantage=I&disabilityOrganizationsAdvantage=I&russianGoodsPreferences=I&orderPriceCurrencyId=-1&okvedWithSubElements=false&jointPurchase=false&byRepresentativeCreated=false&selectedMatchingWordPlace223=NOTICE_AND_DOCS&matchingWordPlace94=NOTIFICATIONS&matchingWordPlace44=NOTIFICATIONS&searchAttachedFile=false&searchTextInAttachedFile=$query&changeParameters=true&showLotsInfo=false&extendedAttributeSearchCriteria.searchByAttributes=NOTIFICATION&law44.okpd.withSubElements=false" . getRegionParams($region);
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -65,27 +67,10 @@ function getPageCount($page)
     return ceil($resultsNumbers / $itemsPerPage);
 }
 
+function getRegionParams($regions)
+{
+    $arr = explode(",", $regions);
+    return "&regionIds=" . implode("&regionIds=", $arr);
+}
+
 ?>
-
-<!--
-Ключевые слова:
-
-сигнализация
-охранно-пожарной сигнализации
-охранной сигнализации
-пожарной сигнализации
-противопожарной защиты
-
-систем оповещения
-звукового оповещения
-тревожной сигнализации
-
-контроля доступом
-СКУД
-управления доступом
-КПП
-проходная
-
-видеонаблюдение
-видеокамеры
--->
