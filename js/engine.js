@@ -11,7 +11,7 @@ function SearchEngine() {
                 result.resolve(parseInt(pageCount[0]));
             }).fail(function (response) {
                 console.error(response);
-                result.fail();
+                result.resolve(0); //TODO add error handler
             });
         return result;
     };
