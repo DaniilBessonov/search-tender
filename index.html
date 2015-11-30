@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Результаты расширенного поиска</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter33913164 = new Ya.Metrika({ id:33913164, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/33913164?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
 
 
     <link href="http://www.zakupki.gov.ru/epz/order/extendedsearch/images/icons/Portal.ico" rel="shortcut icon">
@@ -41,6 +42,12 @@
 
         #results-info {
             margin: 10px 0;
+        }
+
+        .registerBox {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 1px 10px rgba(17, 78, 109, 0.5);
         }
     </style>
 
@@ -126,13 +133,13 @@
                 <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты
                     поиска
                 </button>
-                <button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>
+                <!--<button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>-->
             </div>
             <div id="results-info">
                 <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span>
                 </h3>
 
-                <p>Общее количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
+                <p>Количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
             </div>
         </div>
     </div>
@@ -153,6 +160,10 @@
 <script type="text/javascript" src="js/engine.js"></script>
 
 <script type="text/javascript">
+    if (typeof console == "undefined") {
+        this.console = {log: function() {}};
+    }
+
     var se = new SearchEngine();
 
     $(document).ready(function () {
@@ -163,6 +174,7 @@
     var g_keywords = [
         'сигнализация',
         'охранно-пожарной сигнализации',
+        'ОПС',
         'охранной сигнализации',
         'пожарной сигнализации',
         'противопожарной защиты',
@@ -175,6 +187,7 @@
         'управления доступом',
         'КПП',
         'проходная',
+        'турникет',
 
         'видеонаблюдение',
         'видеокамеры'];
@@ -200,15 +213,14 @@
 
     function disableControls() {
         $("button").addClass("disabled");
-        $("#keywords-container input[type=checkbox]").prop('disabled', true);
+        $("input[type=checkbox]").prop('disabled', true);
     }
 
     function enableControls() {
         $("#removeResults").removeClass("disabled");
         $("#startSearch").removeClass("disabled");
-        $("#keywords-container input[type=checkbox]").prop('disabled', false);
+        $("input[type=checkbox]").prop('disabled', false);
     }
-
 
     function showProgressStatus() {
         $("#search-status").html("Идет поиск").removeClass("label-primary").removeClass("label-success").addClass("label-danger");
@@ -221,7 +233,8 @@
     function removeSearchResults() {
         var el = $("#items-container");
         el.children().remove();
-        el.append("<p>Нет результатов поиска</p>");
+        se.refreshResultsCount();
+        //el.append("<p>Нет результатов поиска</p>");
     }
 
     function getKeywordsForSearch() {
@@ -304,30 +317,5 @@
          }*/
     }
 </script>
-
 </body>
-
 </html>
-
-<!--
-Ключевые слова:
-
-сигнализация
-охранно-пожарной сигнализации
-охранной сигнализации
-пожарной сигнализации
-противопожарной защиты
-
-систем оповещения
-звукового оповещения
-тревожной сигнализации
-
-контроля доступом
-СКУД
-управления доступом
-КПП
-проходная
-
-видеонаблюдение
-видеокамеры
--->
