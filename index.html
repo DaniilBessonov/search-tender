@@ -54,38 +54,38 @@
         <div class="panel-heading">
             <h3 class="panel-title">Регионы поиска</h3>
         </div>
-        <div class="panel-body">
-            <div class="checkbox disabled">
+        <div id="regions-container" class="panel-body">
+            <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="" checked disabled>
+                    <input type="checkbox" value="5277321" checked>
                     Воронежская обл
                 </label>
             </div>
 
-            <div class="checkbox disabled">
+            <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="" disabled>
+                    <input type="checkbox" value="5277325">
                     Курская обл
                 </label>
             </div>
 
-            <div class="checkbox disabled">
+            <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="" disabled>
+                    <input type="checkbox" value="5277326">
                     Липецкая обл
                 </label>
             </div>
 
-            <div class="checkbox disabled">
+            <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="" disabled>
+                    <input type="checkbox" value="5277331">
                     Тамбовская обл
                 </label>
             </div>
 
-            <div class="checkbox disabled">
+            <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="" disabled>
+                    <input type="checkbox" value="5277318">
                     Белгородская обл
                 </label>
             </div>
@@ -157,7 +157,7 @@
 
     $(document).ready(function () {
         generateKeywordsContainers();
-        $("#keywords-container input[type='checkbox']:checked").prop("checked", false)
+        //$("#keywords-container input[type='checkbox']:checked").prop("checked", false)
     });
 
     var g_keywords = [
@@ -180,17 +180,22 @@
         'видеокамеры'];
 
     function startSearch() {
-        showProgressStatus();
-        disableControls();
-        $(document).ready(function () {
-            var keywords = getKeywordsForSearch();
-            se.findItemsForKeywords(keywords).done(function () {
-                removeDuplicates();
-                showFinishStatus();
-                enableControls();
-                console.log("FINISH");
+        var keywords = getKeywordsForSearch();
+        var regions = getRegionsForSearch();
+        if (keywords.length == 0 || regions.length == 0) {
+            alert("Ошибка. Не выбраны параметры для поиска!");
+        } else {
+            showProgressStatus();
+            disableControls();
+            $(document).ready(function () {
+                se.findItemsForKeywords(keywords, regions).done(function () {
+                    removeDuplicates();
+                    showFinishStatus();
+                    enableControls();
+                    console.log("FINISH");
+                });
             });
-        });
+        }
     }
 
     function disableControls() {
@@ -219,10 +224,19 @@
         el.append("<p>Нет результатов поиска</p>");
     }
 
-
     function getKeywordsForSearch() {
         var result = [];
         var checkBoxes = $("#keywords-container input[type='checkbox']:checked");
+        $.each(checkBoxes, function (i, chBox) {
+            result.push($(chBox).attr('value'));
+        });
+        //console.log(result);
+        return result;
+    }
+
+    function getRegionsForSearch() {
+        var result = [];
+        var checkBoxes = $("#regions-container input[type='checkbox']:checked");
         $.each(checkBoxes, function (i, chBox) {
             result.push($(chBox).attr('value'));
         });
@@ -280,14 +294,14 @@
         se.refreshResultsCount();
 
         /*console.log(ids);
-        console.log($.unique(ids));
-        for (var i = 0; i < ids.length; i++) {
-            for (var j = i + 1; j < ids.length; j++) {
-                if (ids[i] == ids[j]) {
-                    $("#" + ids[i])
-                }
-            }
-        }*/
+         console.log($.unique(ids));
+         for (var i = 0; i < ids.length; i++) {
+         for (var j = i + 1; j < ids.length; j++) {
+         if (ids[i] == ids[j]) {
+         $("#" + ids[i])
+         }
+         }
+         }*/
     }
 </script>
 
