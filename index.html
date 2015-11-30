@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Результаты расширенного поиска</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+    <link href="http://www.zakupki.gov.ru/epz/order/extendedsearch/images/icons/Portal.ico" rel="shortcut icon">
+    <link type="text/css" rel="stylesheet" media="all" href="./index_files/style.css">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+
+
+    <style type="text/css">
+
+        .main-container {
+            padding-right: 20px;
+            padding-left: 20px;
+            display: block;
+        }
+
+        .progress {
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            float: none;
+        }
+
+        button {
+            margin-right: 10px;
+        }
+
+        #items-container {
+            padding-top: 20px;
+            font: normal 14px Tahoma, Geneva, sans-serif;
+        }
+        #results-info{
+            margin: 10px 0;
+        }
+    </style>
+
+</head>
+<body>
+<div class="main-container">
+
+    <h2>Фильтры для поиска заказов</h2>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Регионы поиска</h3>
+        </div>
+        <div class="panel-body">
+            <div class="checkbox disabled">
+                <label>
+                    <input type="checkbox" value="" checked disabled>
+                    Воронежская обл
+                </label>
+            </div>
+
+            <div class="checkbox disabled">
+                <label>
+                    <input type="checkbox" value="" disabled>
+                    Курская обл
+                </label>
+            </div>
+
+            <div class="checkbox disabled">
+                <label>
+                    <input type="checkbox" value="" disabled>
+                    Липецкая обл
+                </label>
+            </div>
+
+            <div class="checkbox disabled">
+                <label>
+                    <input type="checkbox" value="" disabled>
+                    Тамбовская обл
+                </label>
+            </div>
+
+            <div class="checkbox disabled">
+                <label>
+                    <input type="checkbox" value="" disabled>
+                    Белгородская обл
+                </label>
+            </div>
+
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Слова для поиска</h3>
+        </div>
+        <div id="keywords-container" class="panel-body">
+            <!-- <div class="row">
+                 <div class="col-xs-6 col-sm-3 col-md-3">
+                     <div class="checkbox">
+                         <label>
+                             <input type="checkbox" value="видеонаблюдение" checked>
+                             видеонаблюдение
+                         </label>
+
+                     </div>
+                 </div>
+                 <div class="col-xs-6 col-sm-9 col-md-9">
+                     <div class="progress">
+                         <div id="pb-видеонаблюдение" class="progress-bar" role="progressbar" style="width: 20%;"></div>
+                     </div>
+                 </div>
+             </div>-->
+
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+            <div>
+                <button id="startSearch" class="btn btn-primary" onclick="startSearch()">Запустить поиск</button>
+                <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты поиска</button>
+                <button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>
+            </div>
+            <div id="results-info">
+                <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span></h3>
+                <p>Общее количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Результаты поиска закупок и заказов</h2>
+
+
+    <div id="items-container">
+
+
+    </div>
+</div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/engine.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        generateKeywordsContainers();
+    });
+
+    var g_keywords = [
+        'сигнализация',
+        'охранно-пожарной сигнализации',
+        'охранной сигнализации',
+        'пожарной сигнализации',
+        'противопожарной защиты',
+
+        'систем оповещения',
+        'звукового оповещения',
+        'тревожной сигнализации',
+        'контроля доступом',
+        'СКУД',
+        'управления доступом',
+        'КПП',
+        'проходная',
+
+        'видеонаблюдение',
+        'видеокамеры'];
+
+    function startSearch() {
+        showProgressStatus();
+        disableControls();
+        $(document).ready(function () {
+            var keywords = getKeywordsForSearch();
+            var se = new SearchEngine();
+            se.findItemsForKeywords(keywords).done(function () {
+                showFinishStatus();
+                enableControls();
+                console.log("FINISH");
+            });
+        });
+    }
+
+    function disableControls(){
+        $("button").addClass("disabled");
+        $("#keywords-container input[type=checkbox]").prop('disabled', true);
+    }
+
+    function enableControls(){
+        $("#removeResults").removeClass("disabled");
+        $("#startSearch").removeClass("disabled");
+        $("#keywords-container input[type=checkbox]").prop('disabled', false);
+    }
+
+
+
+    function showProgressStatus(){
+        $("#search-status").html("Идет поиск").removeClass("label-primary").removeClass("label-success").addClass("label-danger");
+    }
+
+    function showFinishStatus(){
+        $("#search-status").html("Поиск завершен").removeClass("label-primary").removeClass("label-danger").addClass("label-success");
+    }
+
+    function removeSearchResults() {
+        var el = $("#items-container");
+        el.children().remove();
+        el.append("<p>Нет результатов поиска</p>");
+    }
+
+
+    function getKeywordsForSearch() {
+        var result = [];
+        var checkBoxes = $("#keywords-container input[type='checkbox']:checked");
+        $.each(checkBoxes, function (i, chBox) {
+            result.push($(chBox).attr('value'));
+        });
+        //console.log(result);
+        return result;
+    }
+
+    function generateKeywordsContainers() {
+        $.each(g_keywords, function (i, key) {
+            generateKeywordContainer(key);
+        });
+    }
+
+    function generateKeywordContainer(keyword) {
+        var keywordWithoutSpace = (new SearchEngine()).getWordWithoutSpaces(keyword);
+
+        var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-3 col-md-3"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label></div></div><div class="col-xs-6 col-sm-9 col-md-9"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
+        var html = convertStrToHTML("keywordWithoutSpaces", keywordWithoutSpace, htmlTemplate);
+        html = convertStrToHTML("keyword", keyword, html);
+        $("#keywords-container").append(html);
+    }
+
+    function getWordWithoutSpaces(keyword) {
+        return keyword.replace(new RegExp(" ", 'g'), "_");
+    }
+
+    function convertJsToHTML(obj, str) {
+        for (var prop in obj) {
+            var find = 'obj.' + prop;
+            var re = new RegExp(find, 'g');
+            str = str.replace(re, obj[prop]);
+        }
+        return str;
+    }
+
+    function convertStrToHTML(key, val, str) {
+        var find = 'obj.' + key;
+        var re = new RegExp(find, 'g');
+        str = str.replace(re, val);
+        return str;
+    }
+</script>
+
+</body>
+
+</html>
+
+<!--
+Ключевые слова:
+
+сигнализация
+охранно-пожарной сигнализации
+охранной сигнализации
+пожарной сигнализации
+противопожарной защиты
+
+систем оповещения
+звукового оповещения
+тревожной сигнализации
+
+контроля доступом
+СКУД
+управления доступом
+КПП
+проходная
+
+видеонаблюдение
+видеокамеры
+-->
