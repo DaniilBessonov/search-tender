@@ -5,13 +5,39 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Результаты расширенного поиска</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter33913164 = new Ya.Metrika({ id:33913164, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/33913164?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+    <meta name="robots" content="NOINDEX, NOFOLLOW">
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript"> (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+            try {
+                w.yaCounter33913164 = new Ya.Metrika({ id: 33913164, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, ut: "noindex" });
+            } catch (e) {
+            }
+        });
+        var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () {
+            n.parentNode.insertBefore(s, n);
+        };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "yandex_metrika_callbacks");</script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/33913164?ut=noindex" style="position:absolute; left:-9999px;" alt=""/>
+        </div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
 
 
     <link href="http://www.zakupki.gov.ru/epz/order/extendedsearch/images/icons/Portal.ico" rel="shortcut icon">
     <link type="text/css" rel="stylesheet" media="all" href="./index_files/style.css">
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.min.css">
 
 
     <style type="text/css">
@@ -48,6 +74,10 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 1px 10px rgba(17, 78, 109, 0.5);
+        }
+
+        #data-container .input-group {
+            max-width: 250px;
         }
     </style>
 
@@ -99,6 +129,8 @@
 
         </div>
     </div>
+
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Слова для поиска</h3>
@@ -122,6 +154,33 @@
              </div>-->
 
 
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Даты публикации и изменения заказов</h3>
+        </div>
+        <div id="data-container" class="panel-body row">
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <h4>Дата публикации заказа</h4>
+
+                <div class="input-group">
+                    <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                  </span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                <h4>Дата изменения заказа</h4>
+
+                <div class="input-group">
+                    <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                  </span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -158,10 +217,13 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/engine.js"></script>
+<script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-datepicker.ru.min.js"></script>
 
 <script type="text/javascript">
     if (typeof console == "undefined") {
-        this.console = {log: function() {}};
+        this.console = {log: function () {
+        }};
     }
 
     var se = new SearchEngine();
@@ -169,6 +231,7 @@
     $(document).ready(function () {
         generateKeywordsContainers();
         //$("#keywords-container input[type='checkbox']:checked").prop("checked", false)
+        initDataPicker();
     });
 
     var g_keywords = [
@@ -192,23 +255,38 @@
         'видеонаблюдение',
         'видеокамеры'];
 
+    function initDataPicker() {
+        var dataPicker = $('.btn-data-picker');
+        dataPicker.datepicker({
+            format: "yyyy-mm-dd",
+            language: "ru",
+            autoclose: true,
+            todayHighlight: true
+        });
+        dataPicker.datepicker().on('changeDate', function (e) {
+            //console.log(e.currentTarget, e.date.trueFormat());
+            $(e.currentTarget).parent().prev().val(e.date.trueFormat());
+        });
+    }
+
     function startSearch() {
-        var keywords = getKeywordsForSearch();
-        var regions = getRegionsForSearch();
-        if (keywords.length == 0 || regions.length == 0) {
-            alert("Ошибка. Не выбраны параметры для поиска!");
-        } else {
-            showProgressStatus();
-            disableControls();
-            $(document).ready(function () {
+        $(document).ready(function () {
+            var keywords = getKeywordsForSearch();
+            var regions = getRegionsForSearch();
+            if (keywords.length == 0 || regions.length == 0) {
+                alert("Ошибка. Не выбраны параметры для поиска!");
+            } else {
+                showProgressStatus();
+                disableControls();
+                setDatesForSearch();
                 se.findItemsForKeywords(keywords, regions).done(function () {
                     removeDuplicates();
                     showFinishStatus();
                     enableControls();
                     console.log("FINISH");
                 });
-            });
-        }
+            }
+        });
     }
 
     function disableControls() {
@@ -217,8 +295,7 @@
     }
 
     function enableControls() {
-        $("#removeResults").removeClass("disabled");
-        $("#startSearch").removeClass("disabled");
+        $("button").removeClass("disabled");
         $("input[type=checkbox]").prop('disabled', false);
     }
 
@@ -255,6 +332,11 @@
         });
         //console.log(result);
         return result;
+    }
+
+    function setDatesForSearch() {
+        se.orderPublishDateFrom = $("#orderPublishDateFrom").val();
+        se.orderUpdateDateFrom = $("#orderUpdateDateFrom").val();
     }
 
     function generateKeywordsContainers() {
@@ -316,6 +398,13 @@
          }
          }*/
     }
+
+    Date.prototype.trueFormat = function () {
+        var yyyy = this.getFullYear().toString();
+        var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+        var dd = this.getDate().toString();
+        return (dd[1] ? dd : "0" + dd[0]) + '.' + (mm[1] ? mm : "0" + mm[0]) + '.' + yyyy; // padding
+    };
 </script>
 </body>
 </html>

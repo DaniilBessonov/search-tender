@@ -1,7 +1,9 @@
 function SearchEngine() {
+    this.orderPublishDateFrom = "";
+    this.orderUpdateDateFrom = "";
     this.loadPage = function (key, page, regions) {
         var result = $.Deferred();
-        $.get("pageLoader.php", { key: key, page: page, region: regions.join() })
+        $.get("pageLoader.php", { key: key, page: page, region: regions.join(), orderPublishDateFrom: this.orderPublishDateFrom, orderUpdateDateFrom: this.orderUpdateDateFrom})
             .done(function (response) {
                 $("#items-container").append(response);
 
