@@ -72,3 +72,28 @@ function SearchEngine() {
         $("#full-items-count").html(count);
     }
 }
+
+function DBEngine() {
+    this.systemCall = function (method, params) {
+        var result = $.Deferred();
+        var sendParams = (params == undefined) ? {method: method} : { method: method, params: JSON.stringify(params) };
+        $.post("controller.php", sendParams)
+            .done(function (response) {
+                console.log("DBEngine response:", response);
+                result.resolve(JSON.parse(response));
+            }).fail(function (response) {
+                console.error("DBEngine response:", response);
+                //result.resolve(); //TODO add error handler
+            });
+        return result;
+    };
+    this.addToIgnoreList = function (id) {
+        return this.systemCall("addItemToIgnoreList", id);
+    };
+    this.removeFromIgnoreList = function (id) {
+        return this.systemCall("removeItemFromIgnoreList", id);
+    };
+    this.getIgnoreList = function () {
+        return this.systemCall("getIgnoreList");
+    }
+}

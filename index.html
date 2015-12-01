@@ -79,6 +79,10 @@
         #data-container .input-group {
             max-width: 250px;
         }
+
+        .ignore-btn {
+            margin-top: 10px;
+        }
     </style>
 
 </head>
@@ -221,190 +225,213 @@
 <script type="text/javascript" src="js/bootstrap-datepicker.ru.min.js"></script>
 
 <script type="text/javascript">
-    if (typeof console == "undefined") {
-        this.console = {log: function () {
-        }};
-    }
+if (typeof console == "undefined") {
+    this.console = {log: function () {
+    }};
+}
 
-    var se = new SearchEngine();
+var se = new SearchEngine();
+var db = new DBEngine();
 
-    $(document).ready(function () {
-        generateKeywordsContainers();
-        //$("#keywords-container input[type='checkbox']:checked").prop("checked", false)
-        initDataPicker();
+$(document).ready(function () {
+    generateKeywordsContainers();
+    //$("#keywords-container input[type='checkbox']:checked").prop("checked", false);
+    initDataPicker();
+});
+
+var g_keywords = [
+    'сигнализация',
+    'охранно-пожарной сигнализации',
+    'ОПС',
+    'охранной сигнализации',
+    'пожарной сигнализации',
+    'противопожарной защиты',
+
+    'систем оповещения',
+    'звукового оповещения',
+    'тревожной сигнализации',
+    'контроля доступом',
+    'СКУД',
+    'управления доступом',
+    'КПП',
+    'проходная',
+    'турникет',
+
+    'видеонаблюдение',
+    'видеокамеры'];
+
+function initDataPicker() {
+    var dataPicker = $('.btn-data-picker');
+    dataPicker.datepicker({
+        format: "yyyy-mm-dd",
+        language: "ru",
+        autoclose: true,
+        todayHighlight: true
     });
+    dataPicker.datepicker().on('changeDate', function (e) {
+        //console.log(e.currentTarget, e.date.trueFormat());
+        $(e.currentTarget).parent().prev().val(e.date.trueFormat());
+    });
+}
 
-    var g_keywords = [
-        'сигнализация',
-        'охранно-пожарной сигнализации',
-        'ОПС',
-        'охранной сигнализации',
-        'пожарной сигнализации',
-        'противопожарной защиты',
-
-        'систем оповещения',
-        'звукового оповещения',
-        'тревожной сигнализации',
-        'контроля доступом',
-        'СКУД',
-        'управления доступом',
-        'КПП',
-        'проходная',
-        'турникет',
-
-        'видеонаблюдение',
-        'видеокамеры'];
-
-    function initDataPicker() {
-        var dataPicker = $('.btn-data-picker');
-        dataPicker.datepicker({
-            format: "yyyy-mm-dd",
-            language: "ru",
-            autoclose: true,
-            todayHighlight: true
-        });
-        dataPicker.datepicker().on('changeDate', function (e) {
-            //console.log(e.currentTarget, e.date.trueFormat());
-            $(e.currentTarget).parent().prev().val(e.date.trueFormat());
-        });
-    }
-
-    function startSearch() {
-        $(document).ready(function () {
-            var keywords = getKeywordsForSearch();
-            var regions = getRegionsForSearch();
-            if (keywords.length == 0 || regions.length == 0) {
-                alert("Ошибка. Не выбраны параметры для поиска!");
-            } else {
-                showProgressStatus();
-                disableControls();
-                setDatesForSearch();
-                se.findItemsForKeywords(keywords, regions).done(function () {
-                    removeDuplicates();
-                    showFinishStatus();
-                    enableControls();
-                    console.log("FINISH");
-                });
-            }
-        });
-    }
-
-    function disableControls() {
-        $("button").addClass("disabled");
-        $("input[type=checkbox]").prop('disabled', true);
-    }
-
-    function enableControls() {
-        $("button").removeClass("disabled");
-        $("input[type=checkbox]").prop('disabled', false);
-    }
-
-    function showProgressStatus() {
-        $("#search-status").html("Идет поиск").removeClass("label-primary").removeClass("label-success").addClass("label-danger");
-    }
-
-    function showFinishStatus() {
-        $("#search-status").html("Поиск завершен").removeClass("label-primary").removeClass("label-danger").addClass("label-success");
-    }
-
-    function removeSearchResults() {
-        var el = $("#items-container");
-        el.children().remove();
-        se.refreshResultsCount();
-        //el.append("<p>Нет результатов поиска</p>");
-    }
-
-    function getKeywordsForSearch() {
-        var result = [];
-        var checkBoxes = $("#keywords-container input[type='checkbox']:checked");
-        $.each(checkBoxes, function (i, chBox) {
-            result.push($(chBox).attr('value'));
-        });
-        //console.log(result);
-        return result;
-    }
-
-    function getRegionsForSearch() {
-        var result = [];
-        var checkBoxes = $("#regions-container input[type='checkbox']:checked");
-        $.each(checkBoxes, function (i, chBox) {
-            result.push($(chBox).attr('value'));
-        });
-        //console.log(result);
-        return result;
-    }
-
-    function setDatesForSearch() {
-        se.orderPublishDateFrom = $("#orderPublishDateFrom").val();
-        se.orderUpdateDateFrom = $("#orderUpdateDateFrom").val();
-    }
-
-    function generateKeywordsContainers() {
-        $.each(g_keywords, function (i, key) {
-            generateKeywordContainer(key);
-        });
-    }
-
-    function generateKeywordContainer(keyword) {
-        var keywordWithoutSpace = se.getWordWithoutSpaces(keyword);
-
-        var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-3 col-md-3"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label></div></div><div class="col-xs-6 col-sm-9 col-md-9"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
-        var html = convertStrToHTML("keywordWithoutSpaces", keywordWithoutSpace, htmlTemplate);
-        html = convertStrToHTML("keyword", keyword, html);
-        $("#keywords-container").append(html);
-    }
-
-    function getWordWithoutSpaces(keyword) {
-        return keyword.replace(new RegExp(" ", 'g'), "_");
-    }
-
-    function convertJsToHTML(obj, str) {
-        for (var prop in obj) {
-            var find = 'obj.' + prop;
-            var re = new RegExp(find, 'g');
-            str = str.replace(re, obj[prop]);
+function startSearch() {
+    $(document).ready(function () {
+        var keywords = getKeywordsForSearch();
+        var regions = getRegionsForSearch();
+        if (keywords.length == 0 || regions.length == 0) {
+            alert("Ошибка. Не выбраны параметры для поиска!");
+        } else {
+            showProgressStatus();
+            disableControls();
+            setDatesForSearch();
+            se.findItemsForKeywords(keywords, regions).done(function () {
+                removeDuplicates();
+                removeIgnored();
+                showFinishStatus();
+                enableControls();
+                console.log("FINISH");
+                generateIgnoreButtons();
+                se.refreshResultsCount();
+            });
         }
-        return str;
-    }
+    });
+}
 
-    function convertStrToHTML(key, val, str) {
-        var find = 'obj.' + key;
+function disableControls() {
+    $("button").addClass("disabled");
+    $("input[type=checkbox]").prop('disabled', true);
+}
+
+function enableControls() {
+    $("button").removeClass("disabled");
+    $("input[type=checkbox]").prop('disabled', false);
+}
+
+function showProgressStatus() {
+    $("#search-status").html("Идет поиск").removeClass("label-primary").removeClass("label-success").addClass("label-danger");
+}
+
+function showFinishStatus() {
+    $("#search-status").html("Поиск завершен").removeClass("label-primary").removeClass("label-danger").addClass("label-success");
+}
+
+function removeSearchResults() {
+    var el = $("#items-container");
+    el.children().remove();
+    se.refreshResultsCount();
+    //el.append("<p>Нет результатов поиска</p>");
+}
+
+function getKeywordsForSearch() {
+    var result = [];
+    var checkBoxes = $("#keywords-container input[type='checkbox']:checked");
+    $.each(checkBoxes, function (i, chBox) {
+        result.push($(chBox).attr('value'));
+    });
+    //console.log(result);
+    return result;
+}
+
+function getRegionsForSearch() {
+    var result = [];
+    var checkBoxes = $("#regions-container input[type='checkbox']:checked");
+    $.each(checkBoxes, function (i, chBox) {
+        result.push($(chBox).attr('value'));
+    });
+    //console.log(result);
+    return result;
+}
+
+function setDatesForSearch() {
+    se.orderPublishDateFrom = $("#orderPublishDateFrom").val();
+    se.orderUpdateDateFrom = $("#orderUpdateDateFrom").val();
+}
+
+function generateKeywordsContainers() {
+    $.each(g_keywords, function (i, key) {
+        generateKeywordContainer(key);
+    });
+}
+
+function generateKeywordContainer(keyword) {
+    var keywordWithoutSpace = se.getWordWithoutSpaces(keyword);
+
+    var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-3 col-md-3"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label></div></div><div class="col-xs-6 col-sm-9 col-md-9"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
+    var html = convertStrToHTML("keywordWithoutSpaces", keywordWithoutSpace, htmlTemplate);
+    html = convertStrToHTML("keyword", keyword, html);
+    $("#keywords-container").append(html);
+}
+
+function getWordWithoutSpaces(keyword) {
+    return keyword.replace(new RegExp(" ", 'g'), "_");
+}
+
+function convertJsToHTML(obj, str) {
+    for (var prop in obj) {
+        var find = 'obj.' + prop;
         var re = new RegExp(find, 'g');
-        str = str.replace(re, val);
-        return str;
+        str = str.replace(re, obj[prop]);
     }
+    return str;
+}
 
-    function removeDuplicates() {
-        var ids = [];
-        var arrElements = $("#items-container .descriptTenderTd dt a");
-        $.each(arrElements, function (i, item) {
-            var str = $(item).html();
-            var regexp = new RegExp('[0-9]+', '');
-            var id = regexp.exec(str)[0];
-            ids.push(id);
-            //console.log($("#" + id));
-            $("#" + id).remove();
-            $(item).parents(".registerBox").attr("id", id);
-        });
-        se.refreshResultsCount();
+function convertStrToHTML(key, val, str) {
+    var find = 'obj.' + key;
+    var re = new RegExp(find, 'g');
+    str = str.replace(re, val);
+    return str;
+}
 
-        /*console.log(ids);
-         console.log($.unique(ids));
-         for (var i = 0; i < ids.length; i++) {
-         for (var j = i + 1; j < ids.length; j++) {
-         if (ids[i] == ids[j]) {
-         $("#" + ids[i])
-         }
-         }
-         }*/
-    }
+function removeDuplicates() {
+    var ids = [];
+    var arrElements = $("#items-container .descriptTenderTd dt a");
+    $.each(arrElements, function (i, item) {
+        var str = $(item).html();
+        var regexp = new RegExp('[0-9]+', '');
+        var id = regexp.exec(str)[0];
+        ids.push(id);
+        //console.log($("#" + id));
+        $("#" + id).remove();
+        $(item).parents(".registerBox").attr("id", id);
+    });
+    se.refreshResultsCount();
+}
 
-    Date.prototype.trueFormat = function () {
-        var yyyy = this.getFullYear().toString();
-        var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
-        var dd = this.getDate().toString();
-        return (dd[1] ? dd : "0" + dd[0]) + '.' + (mm[1] ? mm : "0" + mm[0]) + '.' + yyyy; // padding
-    };
+function generateIgnoreButtons() {
+    var html = '<dd><button class="btn btn-danger ignore-btn" onclick="addToIgnoreList(this)">не показывать больше</button></dd>';
+    $("#items-container .amountTenderTd dl").append(html);
+}
+
+function addToIgnoreList(el) {
+    var id = $(el).parents(".registerBox").css("opacity", 0.3).attr("id");
+    console.log("Add to ignore id=" + id);
+    db.addToIgnoreList(id).done(function (res) {
+        console.log("Add to ignore id=" + id, res);
+    });
+    $(el).attr("onclick","removeFromIgnoreList(this)").html("показывать");
+}
+
+function removeFromIgnoreList(el) {
+    var id = $(el).parents(".registerBox").css("opacity", 1).attr("id");
+    console.log("Remove from ignore id=" + id);
+    db.removeFromIgnoreList(id).done(function (res) {
+        console.log("Remove from ignore id=" + id, res);
+    });
+    $(el).attr("onclick","addToIgnoreList(this)").html("не показывать больше");
+}
+
+function removeIgnored() {
+    db.getIgnoreList().done(function (res) {
+        $("#" + res.join(", #")).remove();
+    });
+}
+
+Date.prototype.trueFormat = function () {
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+    var dd = this.getDate().toString();
+    return (dd[1] ? dd : "0" + dd[0]) + '.' + (mm[1] ? mm : "0" + mm[0]) + '.' + yyyy; // padding
+};
 </script>
 </body>
 </html>
