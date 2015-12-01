@@ -4,14 +4,14 @@ class Model
     public function addItemToIgnoreList($id)
     {
         Model::createConnection();
-        $query = "insert into ignore_list (item_id) values (" . $id . ")";
+        $query = "insert into ignore_list (item_id) values ('" . $id . "')";
         return mysql_query($query);
     }
 
     public function removeItemFromIgnoreList($id)
     {
         Model::createConnection();
-        $query = "delete from ignore_list where item_id=" . $id;
+        $query = "delete from ignore_list where item_id='" . $id . "'";
         return mysql_query($query);
     }
 
