@@ -9,7 +9,6 @@ if ($key == null || $page == null || $region == null) {
     echo "Error in params<br> Key=$key <br>Page=$page <br>Region=$region";
 } else {
     echo getItemsByKey($key, $page, $region);
-
 }
 
 function getItemsByKey($key, $pageNumber, $region = 5277321)
@@ -31,11 +30,8 @@ function getItemContainer($page)
 
 function loadPage($key, $pageNumber, $region)
 {
-    $orderPublishDateFrom = isset($_GET['orderPublishDateFrom']) ? $_GET['orderPublishDateFrom'] : "";
-    $orderUpdateDateFrom = isset($_GET['orderUpdateDateFrom']) ? $_GET['orderUpdateDateFrom'] : "";
-
     $query = urlencode($key);
-    $url = "http://www.zakupki.gov.ru/epz/order/extendedsearch/search.html?sortDirection=false&orderUpdateDateFrom=$orderUpdateDateFrom&orderPublishDateFrom=$orderPublishDateFrom&sortBy=UPDATE_DATE&recordsPerPage=_10&pageNo=$pageNumber&searchString=$query&placeOfSearch=FZ_44,FZ_223%2CFZ_223&searchType=ORDERS&morphology=true&strictEqual=false&orderPriceCurrencyId=-1&okdpWithSubElements=false&districtIds=5277317&orderStages=AF%2CCA&headAgencyWithSubElements=false&smallBusinessSubject=I&rnpData=I&executionRequirement=I&penalSystemAdvantage=I&disabilityOrganizationsAdvantage=I&russianGoodsPreferences=I&orderPriceCurrencyId=-1&okvedWithSubElements=false&jointPurchase=false&byRepresentativeCreated=false&selectedMatchingWordPlace223=NOTICE_AND_DOCS&matchingWordPlace94=NOTIFICATIONS&matchingWordPlace44=NOTIFICATIONS&searchAttachedFile=false&searchTextInAttachedFile=$query&changeParameters=true&showLotsInfo=false&extendedAttributeSearchCriteria.searchByAttributes=NOTIFICATION&law44.okpd.withSubElements=false" . getRegionParams($region);
+    $url = "http://www.zakupki.gov.ru/epz/order/extendedsearch/search.html?sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_10&pageNo=$pageNumber&searchString=$query&placeOfSearch=FZ_44,FZ_223%2CFZ_223&searchType=ORDERS&morphology=true&strictEqual=false&orderPriceCurrencyId=-1&okdpWithSubElements=false&districtIds=5277317&orderStages=AF%2CCA&headAgencyWithSubElements=false&smallBusinessSubject=I&rnpData=I&executionRequirement=I&penalSystemAdvantage=I&disabilityOrganizationsAdvantage=I&russianGoodsPreferences=I&orderPriceCurrencyId=-1&okvedWithSubElements=false&jointPurchase=false&byRepresentativeCreated=false&selectedMatchingWordPlace223=NOTICE_AND_DOCS&matchingWordPlace94=NOTIFICATIONS&matchingWordPlace44=NOTIFICATIONS&searchAttachedFile=false&searchTextInAttachedFile=$query&changeParameters=true&showLotsInfo=false&extendedAttributeSearchCriteria.searchByAttributes=NOTIFICATION&law44.okpd.withSubElements=false" . getRegionParams($region) . getOptionalParams();
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -73,6 +69,17 @@ function getRegionParams($regions)
 {
     $arr = explode(",", $regions);
     return "&regionIds=" . implode("&regionIds=", $arr);
+}
+
+function getOptionalParams()
+{
+    $result = "";
+    $arrParams = json_decode($_GET['optionalParams']);
+    foreach ($arrParams as $key => $value) {
+        $result = $result . "&" . $key . "=" . $value;
+    }
+    return $result;
+
 }
 
 ?>
