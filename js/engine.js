@@ -1,12 +1,11 @@
 function SearchEngine() {
-    this.orderPublishDateFrom = "";
-    this.orderUpdateDateFrom = "";
+    this.optionalParams="";
     this.loadPage = function (key, page, regions) {
         var result = $.Deferred();
-        $.get("pageLoader.php", { key: key, page: page, region: regions.join(), orderPublishDateFrom: this.orderPublishDateFrom, orderUpdateDateFrom: this.orderUpdateDateFrom})
+        $.get("pageLoader.php", { key: key, page: page, region: regions.join(), optionalParams: JSON.stringify(this.optionalParams)})
             .done(function (response) {
+                //console.log("SE response: ",response);
                 $("#items-container").append(response);
-
                 var regexp = new RegExp('[0-9]+', '');
                 var pageCount = regexp.exec(response.substr(0, 14));
                 //console.log(parseInt(pageCount[0]));

@@ -77,7 +77,12 @@
         }
 
         #data-container .input-group {
-            max-width: 250px;
+            max-width: 350px;
+            margin-top: 10px;
+        }
+
+        #data-container .input-group > span {
+            min-width: 107px;
         }
 
         .ignore-btn {
@@ -169,21 +174,52 @@
                 <h4>Дата публикации заказа</h4>
 
                 <div class="input-group">
+                    <span class="input-group-addon">Дата начала</span>
                     <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                  </span>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </span>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Дата конца</span>
+                    <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </span>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6">
                 <h4>Дата изменения заказа</h4>
 
                 <div class="input-group">
+                    <span class="input-group-addon">Дата начала</span>
                     <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                  </span>
+                    <span class="input-group-btn">
+                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </span>
                 </div>
+                <div class="input-group">
+                    <span class="input-group-addon">Дата конца</span>
+                    <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Цена в руб</h3>
+        </div>
+        <div id="price-container" class="panel-body">
+            <div class="input-group">
+                <span class="input-group-addon">От</span>
+                <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
+                <span class="input-group-addon">До</span>
+                <input id="orderPriceTo" type="number" class="form-control" placeholder="Максимальная цена">
             </div>
         </div>
     </div>
@@ -235,8 +271,9 @@ var db = new DBEngine();
 
 $(document).ready(function () {
     generateKeywordsContainers();
-    //$("#keywords-container input[type='checkbox']:checked").prop("checked", false);
+    //$("#keywords-container input[type='checkbox']:checked").prop("checked", false); //TODO for tests
     initDataPicker();
+    setTodayDate();
 });
 
 var g_keywords = [
@@ -263,7 +300,7 @@ var g_keywords = [
 function initDataPicker() {
     var dataPicker = $('.btn-data-picker');
     dataPicker.datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd.mm.yyyy",
         language: "ru",
         autoclose: true,
         todayHighlight: true
@@ -283,14 +320,14 @@ function startSearch() {
         } else {
             showProgressStatus();
             disableControls();
-            setDatesForSearch();
+            setOptionalParams();
             se.findItemsForKeywords(keywords, regions).done(function () {
                 removeDuplicates();
-                removeIgnored();
+                //removeIgnored();
                 showFinishStatus();
                 enableControls();
                 console.log("FINISH");
-                generateIgnoreButtons();
+                //generateIgnoreButtons();
                 se.refreshResultsCount();
             });
         }
@@ -342,9 +379,15 @@ function getRegionsForSearch() {
     return result;
 }
 
-function setDatesForSearch() {
-    se.orderPublishDateFrom = $("#orderPublishDateFrom").val();
-    se.orderUpdateDateFrom = $("#orderUpdateDateFrom").val();
+function setOptionalParams() {
+    se.optionalParams = {
+        orderPublishDateFrom: $("#orderPublishDateFrom").val(),
+        orderUpdateDateFrom: $("#orderUpdateDateFrom").val(),
+        orderPublishDateTo: $("#orderPublishDateTo").val(),
+        orderUpdateDateTo: $("#orderUpdateDateTo").val(),
+        orderPriceFrom: $("#orderPriceFrom").val(),
+        orderPriceTo: $("#orderPriceTo").val()
+    };
 }
 
 function generateKeywordsContainers() {
@@ -408,7 +451,7 @@ function addToIgnoreList(el) {
     db.addToIgnoreList(id).done(function (res) {
         console.log("Add to ignore id=" + id, res);
     });
-    $(el).attr("onclick","removeFromIgnoreList(this)").html("показывать");
+    $(el).attr("onclick", "removeFromIgnoreList(this)").html("показывать");
 }
 
 function removeFromIgnoreList(el) {
@@ -417,7 +460,7 @@ function removeFromIgnoreList(el) {
     db.removeFromIgnoreList(id).done(function (res) {
         console.log("Remove from ignore id=" + id, res);
     });
-    $(el).attr("onclick","addToIgnoreList(this)").html("не показывать больше");
+    $(el).attr("onclick", "addToIgnoreList(this)").html("не показывать больше");
 }
 
 function removeIgnored() {
@@ -426,6 +469,10 @@ function removeIgnored() {
     });
 }
 
+function setTodayDate() {
+    var today = new Date();
+    $("#orderPublishDateFrom, #orderUpdateDateFrom").val(today.trueFormat());
+}
 Date.prototype.trueFormat = function () {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
