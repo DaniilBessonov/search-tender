@@ -89,7 +89,19 @@
             margin-top: 10px;
         }
 
+        .btn-remove-keyword {
+            float: right;
+            display: none;
+        }
 
+        #keywords-container .row:hover .btn-remove-keyword {
+            opacity: 0.2;
+            display: block;
+        }
+
+        #keywords-container .row .btn-remove-keyword:hover {
+            opacity: 1;
+        }
     </style>
 
 </head>
@@ -157,31 +169,31 @@
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277319" >
+                    <input type="checkbox" value="5277319">
                     Брянская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277320" >
+                    <input type="checkbox" value="5277320">
                     Владимирская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277322" >
+                    <input type="checkbox" value="5277322">
                     Ивановская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277323" >
+                    <input type="checkbox" value="5277323">
                     Калужская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277324" >
+                    <input type="checkbox" value="5277324">
                     Костромская обл
                 </label>
             </div>
@@ -190,37 +202,37 @@
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277328" >
+                    <input type="checkbox" value="5277328">
                     Орловская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277329" >
+                    <input type="checkbox" value="5277329">
                     Рязанская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277330" >
+                    <input type="checkbox" value="5277330">
                     Смоленская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277332" >
+                    <input type="checkbox" value="5277332">
                     Тверская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277333" >
+                    <input type="checkbox" value="5277333">
                     Тульская обл
                 </label>
             </div>
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277334" >
+                    <input type="checkbox" value="5277334">
                     Ярославская обл
                 </label>
             </div>
@@ -234,25 +246,35 @@
     <div class="panel-heading">
         <h3 class="panel-title">Слова для поиска</h3>
     </div>
-    <div id="keywords-container" class="panel-body">
-        <!-- <div class="row">
-             <div class="col-xs-6 col-sm-3 col-md-3">
-                 <div class="checkbox">
-                     <label>
-                         <input type="checkbox" value="видеонаблюдение" checked>
-                         видеонаблюдение
-                     </label>
+    <div class="panel-body">
+        <div id="keywords-container">
+            <!-- <div class="row">
+                 <div class="col-xs-6 col-sm-5 col-md-5">
+                     <div class="checkbox">
+                         <label>
+                             <input type="checkbox" value="видеонаблюдение" checked>
+                             видеонаблюдение
+                         </label>
 
+                         <button type="button" class="btn btn-danger btn-sm btn-remove-keyword"
+                                 onclick="removeKeyword(this)"><span
+                                 class="glyphicon glyphicon-remove" aria-hidden="true"></span> Удалить
+                         </button>
+                     </div>
                  </div>
-             </div>
-             <div class="col-xs-6 col-sm-9 col-md-9">
-                 <div class="progress">
-                     <div id="pb-видеонаблюдение" class="progress-bar" role="progressbar" style="width: 20%;"></div>
+                 <div class="col-xs-6 col-sm-7 col-md-7">
+                     <div class="progress">
+                         <div id="pb-видеонаблюдение" class="progress-bar" role="progressbar" style="width: 20%;"></div>
+                     </div>
                  </div>
-             </div>
-         </div>-->
-
-
+             </div>-->
+        </div>
+        <div class="input-group" style="margin-top: 10px">
+            <input id="keyword-input" type="text" class="form-control" placeholder="поисковый запрос">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="addKeyword()">Добавить</button>
+            </span>
+        </div>
     </div>
 </div>
 <div class="panel panel-default">
@@ -314,9 +336,10 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Цена в руб</h3>
+        <h3 class="panel-title">Диапазон цены аукциона</h3>
     </div>
     <div id="price-container" class="panel-body">
+        <h4>Цена заказа</h4>
         <div class="input-group">
             <span class="input-group-addon">От</span>
             <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
@@ -500,12 +523,17 @@ function generateKeywordsContainers() {
     $.each(g_keywords, function (i, key) {
         generateKeywordContainer(key);
     });
+    db.getKeywords().done(function (keywords) {
+        $.each(keywords, function (i, key) {
+            generateKeywordContainer(key);
+        });
+    });
 }
 
 function generateKeywordContainer(keyword) {
     var keywordWithoutSpace = se.getWordWithoutSpaces(keyword);
 
-    var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-3 col-md-3"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label></div></div><div class="col-xs-6 col-sm-9 col-md-9"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
+    var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-5 col-md-5"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label><button type="button" class="btn btn-danger btn-sm btn-remove-keyword" onclick="removeKeyword(this)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Удалить навсегда</button></div></div><div class="col-xs-6 col-sm-7 col-md-7"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
     var html = convertStrToHTML("keywordWithoutSpaces", keywordWithoutSpace, htmlTemplate);
     html = convertStrToHTML("keyword", keyword, html);
     $("#keywords-container").append(html);
@@ -573,6 +601,24 @@ function removeIgnored() {
     return db.getIgnoreList().done(function (res) {
         $("#" + res.join(", #")).remove();
     });
+}
+
+function addKeyword() {
+    var inputEl = $("#keyword-input");
+    var key = inputEl.val();
+    if (key != "") {
+        db.addKeyword(key);
+        generateKeywordContainer(key);
+        inputEl.val("");
+    }else{
+        alert("Введите поисковый запрос");
+    }
+}
+
+function removeKeyword(el) {
+    var inp = $(el).prev().children("input");
+    db.removeKeyword(inp.val());
+    inp.parents(".row").remove();
 }
 
 function setTodayDate() {

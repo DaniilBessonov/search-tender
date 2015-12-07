@@ -27,6 +27,30 @@ class Model
         return $result;
     }
 
+    public function addKeyword($keyword)
+    {
+        Model::createConnection();
+        $query = "insert into keywords (keyword) values ('" . $keyword . "')";
+        return mysql_query($query);
+    }
+    public function removeKeyword($keyword)
+    {
+        Model::createConnection();
+        $query = "delete from keywords where keyword='" . $keyword . "'";
+        return mysql_query($query);
+    }
+    public function getKeywords()
+    {
+        $result = array();
+        Model::createConnection();
+        $query = "select keyword from keywords";
+        $rows = mysql_query($query);
+        while ($res = mysql_fetch_assoc($rows)) {
+            $result[] = $res['keyword'];
+        }
+        return $result;
+    }
+
     private function createConnection()
     {
         Model::createWebConnection() or Model::createLocalConnection() or die("Connection to DB failed");
