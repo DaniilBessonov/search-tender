@@ -76,6 +76,7 @@
             max-width: 420px;
             margin-top: 10px;
         }
+
         #price-container .input-group {
             max-width: 500px;
         }
@@ -177,8 +178,10 @@
                 <div class="input-group">
                     <span class="input-group-addon">Дата начала</span>
                     <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
+
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                            <span class="glyphicon glyphicon-remove"></span></button>
                         <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
                     </div>
                 </div>
@@ -186,8 +189,10 @@
                 <div class="input-group">
                     <span class="input-group-addon">Дата конца</span>
                     <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
+
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                            <span class="glyphicon glyphicon-remove"></span></button>
                         <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
                     </div>
                 </div>
@@ -198,16 +203,20 @@
                 <div class="input-group">
                     <span class="input-group-addon">Дата начала</span>
                     <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
+
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                            <span class="glyphicon glyphicon-remove"></span></button>
                         <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Дата конца</span>
                     <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
+
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                            <span class="glyphicon glyphicon-remove"></span></button>
                         <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
                     </div>
                 </div>
@@ -225,6 +234,7 @@
                 <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
                 <span class="input-group-addon">До</span>
                 <input id="orderPriceTo" type="number" class="form-control" placeholder="Максимальная цена">
+                <span class="input-group-addon">Руб</span>
             </div>
         </div>
     </div>
@@ -329,12 +339,13 @@ function startSearch() {
             setOptionalParams();
             se.findItemsForKeywords(keywords, regions).done(function () {
                 removeDuplicates();
-                //removeIgnored();
-                showFinishStatus();
-                enableControls();
-                console.log("FINISH");
-                //generateIgnoreButtons();
-                se.refreshResultsCount();
+                removeIgnored().done(function(){
+                    generateIgnoreButtons();
+                    se.refreshResultsCount();
+                    showFinishStatus();
+                    enableControls();
+                    console.log("FINISH");
+                });
             });
         }
     });
@@ -394,7 +405,7 @@ function setOptionalParams() {
         orderPriceFrom: $("#orderPriceFrom").val(),
         orderPriceTo: $("#orderPriceTo").val()
     };
-    console.log("Optional params:", se.optionalParams);
+    //console.log("Optional params:", se.optionalParams);
 }
 
 function generateKeywordsContainers() {
@@ -456,7 +467,7 @@ function addToIgnoreList(el) {
     var id = $(el).parents(".registerBox").css("opacity", 0.3).attr("id");
     console.log("Add to ignore id=" + id);
     db.addToIgnoreList(id).done(function (res) {
-        console.log("Add to ignore id=" + id, res);
+        console.log("Added to ignore id=" + id, res);
     });
     $(el).attr("onclick", "removeFromIgnoreList(this)").html("показывать");
 }
@@ -465,13 +476,13 @@ function removeFromIgnoreList(el) {
     var id = $(el).parents(".registerBox").css("opacity", 1).attr("id");
     console.log("Remove from ignore id=" + id);
     db.removeFromIgnoreList(id).done(function (res) {
-        console.log("Remove from ignore id=" + id, res);
+        console.log("Removed from ignore id=" + id, res);
     });
     $(el).attr("onclick", "addToIgnoreList(this)").html("не показывать больше");
 }
 
 function removeIgnored() {
-    db.getIgnoreList().done(function (res) {
+    return db.getIgnoreList().done(function (res) {
         $("#" + res.join(", #")).remove();
     });
 }

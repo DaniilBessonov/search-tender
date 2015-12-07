@@ -1,5 +1,5 @@
 function SearchEngine() {
-    this.optionalParams="";
+    this.optionalParams = "";
     this.loadPage = function (key, page, regions) {
         var result = $.Deferred();
         $.get("pageLoader.php", { key: key, page: page, region: regions.join(), optionalParams: JSON.stringify(this.optionalParams)})
@@ -18,7 +18,7 @@ function SearchEngine() {
     };
     this.findItemsRecursive = function (key, regions, page, maxPage, scanning) {
         var that = this;
-        console.log(page, maxPage);
+        console.log("Parsing page #" + page + " of " + maxPage);
         this.refreshProgressBar(key, page, maxPage + 1);
         this.refreshResultsCount();
 

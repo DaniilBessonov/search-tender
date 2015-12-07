@@ -29,8 +29,18 @@ class Model
 
     private function createConnection()
     {
-        //byethost8.com
-        mysql_connect("sql308.byethost8.com", "b8_16943261", "Optimus") or die(mysql_error);
-        mysql_select_db("b8_16943261_tender") or die(mysql_error);
+        Model::createWebConnection() or Model::createLocalConnection() or die("Connection to DB failed");
     }
+
+    private function createWebConnection()
+    {
+        //byethost8.com
+        return mysql_connect("sql308.byethost8.com", "b8_16943261", "Optimus") and mysql_select_db("b8_16943261_tender");
+    }
+
+    private function createLocalConnection()
+    {
+        return mysql_connect("localhost", "root", "") and mysql_select_db("test");
+    }
+
 }
