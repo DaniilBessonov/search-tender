@@ -1,5 +1,5 @@
 function SearchEngine() {
-    this.optionalParams="";
+    this.optionalParams = "";
     this.loadPage = function (key, page, regions) {
         var result = $.Deferred();
         $.get("pageLoader.php", { key: key, page: page, region: regions.join(), optionalParams: JSON.stringify(this.optionalParams)})
@@ -18,7 +18,7 @@ function SearchEngine() {
     };
     this.findItemsRecursive = function (key, regions, page, maxPage, scanning) {
         var that = this;
-        console.log(page, maxPage);
+        console.log("Parsing page #" + page + " of " + maxPage);
         this.refreshProgressBar(key, page, maxPage + 1);
         this.refreshResultsCount();
 
@@ -74,6 +74,7 @@ function SearchEngine() {
 
 function DBEngine() {
     this.systemCall = function (method, params) {
+        console.log("DBEngine request:", method, params);
         var result = $.Deferred();
         var sendParams = (params == undefined) ? {method: method} : { method: method, params: JSON.stringify(params) };
         $.post("controller.php", sendParams)
@@ -94,5 +95,14 @@ function DBEngine() {
     };
     this.getIgnoreList = function () {
         return this.systemCall("getIgnoreList");
+    };
+    this.addKeyword = function (keyword) {
+        return this.systemCall("addKeyword", keyword);
+    };
+    this.removeKeyword = function (keyword) {
+        return this.systemCall("removeKeyword", keyword);
+    };
+    this.getKeywords = function () {
+        return this.systemCall("getKeywords");
     }
 }

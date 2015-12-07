@@ -57,10 +57,6 @@
             float: none;
         }
 
-        button {
-            margin-right: 10px;
-        }
-
         #items-container {
             padding-top: 20px;
             font: normal 14px Tahoma, Geneva, sans-serif;
@@ -77,8 +73,12 @@
         }
 
         #data-container .input-group {
-            max-width: 350px;
+            max-width: 420px;
             margin-top: 10px;
+        }
+
+        #price-container .input-group {
+            max-width: 500px;
         }
 
         #data-container .input-group > span {
@@ -88,23 +88,45 @@
         .ignore-btn {
             margin-top: 10px;
         }
+
+        .btn-remove-keyword {
+            float: right;
+            display: none;
+        }
+
+        #keywords-container .row:hover .btn-remove-keyword {
+            opacity: 0.2;
+            display: block;
+        }
+
+        #keywords-container .row .btn-remove-keyword:hover {
+            opacity: 1;
+        }
     </style>
 
 </head>
 <body>
 <div class="main-container">
 
-    <h2>Фильтры для поиска заказов</h2>
+<h2>Фильтры для поиска заказов</h2>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Регионы поиска</h3>
-        </div>
-        <div id="regions-container" class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Регионы поиска</h3>
+    </div>
+    <div id="regions-container" class="panel-body row">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
             <div class="checkbox ">
                 <label>
                     <input type="checkbox" value="5277321" checked>
                     Воронежская обл
+                </label>
+            </div>
+
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277318">
+                    Белгородская обл
                 </label>
             </div>
 
@@ -124,133 +146,237 @@
 
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277331">
-                    Тамбовская обл
+                    <input type="checkbox" value="5277327">
+                    Московская обл
                 </label>
             </div>
 
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277318">
-                    Белгородская обл
+                    <input type="checkbox" value="5277331">
+                    Тамбовская обл
+                </label>
+            </div>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277335">
+                    Город Москва
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277319">
+                    Брянская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277320">
+                    Владимирская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277322">
+                    Ивановская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277323">
+                    Калужская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277324">
+                    Костромская обл
+                </label>
+            </div>
+
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277328">
+                    Орловская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277329">
+                    Рязанская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277330">
+                    Смоленская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277332">
+                    Тверская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277333">
+                    Тульская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277334">
+                    Ярославская обл
                 </label>
             </div>
 
         </div>
     </div>
+</div>
 
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Слова для поиска</h3>
-        </div>
-        <div id="keywords-container" class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Слова для поиска</h3>
+    </div>
+    <div class="panel-body">
+        <div id="keywords-container">
             <!-- <div class="row">
-                 <div class="col-xs-6 col-sm-3 col-md-3">
+                 <div class="col-xs-6 col-sm-5 col-md-5">
                      <div class="checkbox">
                          <label>
                              <input type="checkbox" value="видеонаблюдение" checked>
                              видеонаблюдение
                          </label>
 
+                         <button type="button" class="btn btn-danger btn-sm btn-remove-keyword"
+                                 onclick="removeKeyword(this)"><span
+                                 class="glyphicon glyphicon-remove" aria-hidden="true"></span> Удалить
+                         </button>
                      </div>
                  </div>
-                 <div class="col-xs-6 col-sm-9 col-md-9">
+                 <div class="col-xs-6 col-sm-7 col-md-7">
                      <div class="progress">
                          <div id="pb-видеонаблюдение" class="progress-bar" role="progressbar" style="width: 20%;"></div>
                      </div>
                  </div>
              </div>-->
-
-
+        </div>
+        <div class="input-group" style="margin-top: 10px">
+            <input id="keyword-input" type="text" class="form-control" placeholder="поисковый запрос">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="addKeyword()">Добавить</button>
+            </span>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Даты публикации и изменения заказов</h3>
-        </div>
-        <div id="data-container" class="panel-body row">
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <h4>Дата публикации заказа</h4>
-
-                <div class="input-group">
-                    <span class="input-group-addon">Дата начала</span>
-                    <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-addon">Дата конца</span>
-                    <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <h4>Дата изменения заказа</h4>
-
-                <div class="input-group">
-                    <span class="input-group-addon">Дата начала</span>
-                    <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Дата конца</span>
-                    <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
-                </div>
-            </div>
-        </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Даты публикации и изменения заказов</h3>
     </div>
+    <div id="data-container" class="panel-body row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <h4>Дата публикации заказа</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Цена в руб</h3>
-        </div>
-        <div id="price-container" class="panel-body">
             <div class="input-group">
-                <span class="input-group-addon">От</span>
-                <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
-                <span class="input-group-addon">До</span>
-                <input id="orderPriceTo" type="number" class="form-control" placeholder="Максимальная цена">
+                <span class="input-group-addon">Дата начала</span>
+                <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon">Дата конца</span>
+                <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <h4>Дата изменения заказа</h4>
+
+            <div class="input-group">
+                <span class="input-group-addon">Дата начала</span>
+                <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Дата конца</span>
+                <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="panel panel-default">
-
-        <div class="panel-body">
-            <div>
-                <button id="startSearch" class="btn btn-primary" onclick="startSearch()">Запустить поиск</button>
-                <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты
-                    поиска
-                </button>
-                <!--<button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>-->
-            </div>
-            <div id="results-info">
-                <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span>
-                </h3>
-
-                <p>Количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
-            </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Диапазон цены аукциона</h3>
+    </div>
+    <div id="price-container" class="panel-body">
+        <h4>Цена заказа</h4>
+        <div class="input-group">
+            <span class="input-group-addon">От</span>
+            <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
+            <span class="input-group-addon">До</span>
+            <input id="orderPriceTo" type="number" class="form-control" placeholder="Максимальная цена">
+            <span class="input-group-addon">Руб</span>
         </div>
     </div>
+</div>
 
+<div class="panel panel-default">
 
-    <h2>Результаты поиска закупок и заказов</h2>
+    <div class="panel-body">
+        <div>
+            <button id="startSearch" class="btn btn-primary" onclick="startSearch()">Запустить поиск</button>
+            <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты
+                поиска
+            </button>
+            <!--<button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>-->
+        </div>
+        <div id="results-info">
+            <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span>
+            </h3>
 
-
-    <div id="items-container">
-
-
+            <p>Количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
+        </div>
     </div>
+</div>
+
+
+<h2>Результаты поиска закупок и заказов</h2>
+
+
+<div id="items-container">
+
+
+</div>
 </div>
 
 
@@ -268,14 +394,6 @@ if (typeof console == "undefined") {
 
 var se = new SearchEngine();
 var db = new DBEngine();
-
-$(document).ready(function () {
-    generateKeywordsContainers();
-    //$("#keywords-container input[type='checkbox']:checked").prop("checked", false); //TODO for tests
-    initDataPicker();
-    setTodayDate();
-});
-
 var g_keywords = [
     'сигнализация',
     'охранно-пожарной сигнализации',
@@ -296,6 +414,14 @@ var g_keywords = [
 
     'видеонаблюдение',
     'видеокамеры'];
+
+
+$(document).ready(function () {
+    generateKeywordsContainers();
+    $("#keywords-container input[type='checkbox']:checked").prop("checked", false); //TODO for tests
+    initDataPicker();
+    setTodayDate();
+});
 
 function initDataPicker() {
     var dataPicker = $('.btn-data-picker');
@@ -318,17 +444,19 @@ function startSearch() {
         if (keywords.length == 0 || regions.length == 0) {
             alert("Ошибка. Не выбраны параметры для поиска!");
         } else {
+            $("#items-container").children().remove();
             showProgressStatus();
             disableControls();
             setOptionalParams();
             se.findItemsForKeywords(keywords, regions).done(function () {
                 removeDuplicates();
-                //removeIgnored();
-                showFinishStatus();
-                enableControls();
-                console.log("FINISH");
-                //generateIgnoreButtons();
-                se.refreshResultsCount();
+                removeIgnored().done(function () {
+                    generateIgnoreButtons();
+                    se.refreshResultsCount();
+                    showFinishStatus();
+                    enableControls();
+                    console.log("FINISH");
+                });
             });
         }
     });
@@ -388,18 +516,24 @@ function setOptionalParams() {
         orderPriceFrom: $("#orderPriceFrom").val(),
         orderPriceTo: $("#orderPriceTo").val()
     };
+    //console.log("Optional params:", se.optionalParams);
 }
 
 function generateKeywordsContainers() {
-    $.each(g_keywords, function (i, key) {
+/*    $.each(g_keywords, function (i, key) {
         generateKeywordContainer(key);
+    });*/
+    db.getKeywords().done(function (keywords) {
+        $.each(keywords, function (i, key) {
+            generateKeywordContainer(key);
+        });
     });
 }
 
 function generateKeywordContainer(keyword) {
     var keywordWithoutSpace = se.getWordWithoutSpaces(keyword);
 
-    var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-3 col-md-3"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label></div></div><div class="col-xs-6 col-sm-9 col-md-9"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
+    var htmlTemplate = '<div class="row"><div class="col-xs-6 col-sm-5 col-md-5"><div class="checkbox"><label><input type="checkbox" value="obj.keyword" checked>obj.keyword</label><button type="button" class="btn btn-danger btn-sm btn-remove-keyword" onclick="removeKeyword(this)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Удалить навсегда</button></div></div><div class="col-xs-6 col-sm-7 col-md-7"><div class="progress" style="display:none"><div id="pb-obj.keywordWithoutSpaces" class="progress-bar" role="progressbar" style="width: 0%;"></div></div></div></div>';
     var html = convertStrToHTML("keywordWithoutSpaces", keywordWithoutSpace, htmlTemplate);
     html = convertStrToHTML("keyword", keyword, html);
     $("#keywords-container").append(html);
@@ -449,7 +583,7 @@ function addToIgnoreList(el) {
     var id = $(el).parents(".registerBox").css("opacity", 0.3).attr("id");
     console.log("Add to ignore id=" + id);
     db.addToIgnoreList(id).done(function (res) {
-        console.log("Add to ignore id=" + id, res);
+        console.log("Added to ignore id=" + id, res);
     });
     $(el).attr("onclick", "removeFromIgnoreList(this)").html("показывать");
 }
@@ -458,15 +592,33 @@ function removeFromIgnoreList(el) {
     var id = $(el).parents(".registerBox").css("opacity", 1).attr("id");
     console.log("Remove from ignore id=" + id);
     db.removeFromIgnoreList(id).done(function (res) {
-        console.log("Remove from ignore id=" + id, res);
+        console.log("Removed from ignore id=" + id, res);
     });
     $(el).attr("onclick", "addToIgnoreList(this)").html("не показывать больше");
 }
 
 function removeIgnored() {
-    db.getIgnoreList().done(function (res) {
+    return db.getIgnoreList().done(function (res) {
         $("#" + res.join(", #")).remove();
     });
+}
+
+function addKeyword() {
+    var inputEl = $("#keyword-input");
+    var key = inputEl.val();
+    if (key != "") {
+        db.addKeyword(key);
+        generateKeywordContainer(key);
+        inputEl.val("");
+    }else{
+        alert("Введите поисковый запрос");
+    }
+}
+
+function removeKeyword(el) {
+    var inp = $(el).prev().children("input");
+    db.removeKeyword(inp.val());
+    inp.parents(".row").remove();
 }
 
 function setTodayDate() {

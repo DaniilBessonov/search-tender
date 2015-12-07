@@ -27,10 +27,44 @@ class Model
         return $result;
     }
 
+    public function addKeyword($keyword)
+    {
+        Model::createConnection();
+        $query = "insert into keywords (keyword) values ('" . $keyword . "')";
+        return mysql_query($query);
+    }
+    public function removeKeyword($keyword)
+    {
+        Model::createConnection();
+        $query = "delete from keywords where keyword='" . $keyword . "'";
+        return mysql_query($query);
+    }
+    public function getKeywords()
+    {
+        $result = array();
+        Model::createConnection();
+        $query = "select keyword from keywords";
+        $rows = mysql_query($query);
+        while ($res = mysql_fetch_assoc($rows)) {
+            $result[] = $res['keyword'];
+        }
+        return $result;
+    }
+
     private function createConnection()
     {
-        //byethost8.com
-        mysql_connect("sql308.byethost8.com", "b8_16943261", "Optimus") or die(mysql_error);
-        mysql_select_db("b8_16943261_tender") or die(mysql_error);
+        Model::createWebConnection() or Model::createLocalConnection() or die("Connection to DB failed");
     }
+
+    private function createWebConnection()
+    {
+        //byethost8.com
+        return mysql_connect("sql308.byethost8.com", "b8_16943261", "Optimus") and mysql_select_db("b8_16943261_tender");
+    }
+
+    private function createLocalConnection()
+    {
+        return mysql_connect("localhost", "root", "") and mysql_select_db("test");
+    }
+
 }
