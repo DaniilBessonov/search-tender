@@ -96,17 +96,25 @@
 <body>
 <div class="main-container">
 
-    <h2>Фильтры для поиска заказов</h2>
+<h2>Фильтры для поиска заказов</h2>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Регионы поиска</h3>
-        </div>
-        <div id="regions-container" class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Регионы поиска</h3>
+    </div>
+    <div id="regions-container" class="panel-body row">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
             <div class="checkbox ">
                 <label>
                     <input type="checkbox" value="5277321" checked>
                     Воронежская обл
+                </label>
+            </div>
+
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277318">
+                    Белгородская обл
                 </label>
             </div>
 
@@ -126,146 +134,226 @@
 
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277331">
-                    Тамбовская обл
+                    <input type="checkbox" value="5277327">
+                    Московская обл
                 </label>
             </div>
 
             <div class="checkbox ">
                 <label>
-                    <input type="checkbox" value="5277318">
-                    Белгородская обл
+                    <input type="checkbox" value="5277331">
+                    Тамбовская обл
+                </label>
+            </div>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277335">
+                    Город Москва
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277319" >
+                    Брянская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277320" >
+                    Владимирская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277322" >
+                    Ивановская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277323" >
+                    Калужская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277324" >
+                    Костромская обл
+                </label>
+            </div>
+
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277328" >
+                    Орловская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277329" >
+                    Рязанская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277330" >
+                    Смоленская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277332" >
+                    Тверская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277333" >
+                    Тульская обл
+                </label>
+            </div>
+            <div class="checkbox ">
+                <label>
+                    <input type="checkbox" value="5277334" >
+                    Ярославская обл
                 </label>
             </div>
 
         </div>
     </div>
+</div>
 
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Слова для поиска</h3>
-        </div>
-        <div id="keywords-container" class="panel-body">
-            <!-- <div class="row">
-                 <div class="col-xs-6 col-sm-3 col-md-3">
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" value="видеонаблюдение" checked>
-                             видеонаблюдение
-                         </label>
-
-                     </div>
-                 </div>
-                 <div class="col-xs-6 col-sm-9 col-md-9">
-                     <div class="progress">
-                         <div id="pb-видеонаблюдение" class="progress-bar" role="progressbar" style="width: 20%;"></div>
-                     </div>
-                 </div>
-             </div>-->
-
-
-        </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Слова для поиска</h3>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Даты публикации и изменения заказов</h3>
-        </div>
-        <div id="data-container" class="panel-body row">
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <h4>Дата публикации заказа</h4>
+    <div id="keywords-container" class="panel-body">
+        <!-- <div class="row">
+             <div class="col-xs-6 col-sm-3 col-md-3">
+                 <div class="checkbox">
+                     <label>
+                         <input type="checkbox" value="видеонаблюдение" checked>
+                         видеонаблюдение
+                     </label>
 
-                <div class="input-group">
-                    <span class="input-group-addon">Дата начала</span>
-                    <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
+                 </div>
+             </div>
+             <div class="col-xs-6 col-sm-9 col-md-9">
+                 <div class="progress">
+                     <div id="pb-видеонаблюдение" class="progress-bar" role="progressbar" style="width: 20%;"></div>
+                 </div>
+             </div>
+         </div>-->
 
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
-                            <span class="glyphicon glyphicon-remove"></span></button>
-                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </div>
-                </div>
 
-                <div class="input-group">
-                    <span class="input-group-addon">Дата конца</span>
-                    <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
-
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
-                            <span class="glyphicon glyphicon-remove"></span></button>
-                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <h4>Дата изменения заказа</h4>
-
-                <div class="input-group">
-                    <span class="input-group-addon">Дата начала</span>
-                    <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
-
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
-                            <span class="glyphicon glyphicon-remove"></span></button>
-                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">Дата конца</span>
-                    <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
-
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
-                            <span class="glyphicon glyphicon-remove"></span></button>
-                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Даты публикации и изменения заказов</h3>
+    </div>
+    <div id="data-container" class="panel-body row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <h4>Дата публикации заказа</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Цена в руб</h3>
-        </div>
-        <div id="price-container" class="panel-body">
             <div class="input-group">
-                <span class="input-group-addon">От</span>
-                <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
-                <span class="input-group-addon">До</span>
-                <input id="orderPriceTo" type="number" class="form-control" placeholder="Максимальная цена">
-                <span class="input-group-addon">Руб</span>
+                <span class="input-group-addon">Дата начала</span>
+                <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon">Дата конца</span>
+                <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <h4>Дата изменения заказа</h4>
+
+            <div class="input-group">
+                <span class="input-group-addon">Дата начала</span>
+                <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">Дата конца</span>
+                <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить
+                        <span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="panel panel-default">
-
-        <div class="panel-body">
-            <div>
-                <button id="startSearch" class="btn btn-primary" onclick="startSearch()">Запустить поиск</button>
-                <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты
-                    поиска
-                </button>
-                <!--<button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>-->
-            </div>
-            <div id="results-info">
-                <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span>
-                </h3>
-
-                <p>Количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
-            </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Цена в руб</h3>
+    </div>
+    <div id="price-container" class="panel-body">
+        <div class="input-group">
+            <span class="input-group-addon">От</span>
+            <input id="orderPriceFrom" type="number" class="form-control" placeholder="Минимальная цена">
+            <span class="input-group-addon">До</span>
+            <input id="orderPriceTo" type="number" class="form-control" placeholder="Максимальная цена">
+            <span class="input-group-addon">Руб</span>
         </div>
     </div>
+</div>
 
+<div class="panel panel-default">
 
-    <h2>Результаты поиска закупок и заказов</h2>
+    <div class="panel-body">
+        <div>
+            <button id="startSearch" class="btn btn-primary" onclick="startSearch()">Запустить поиск</button>
+            <button id="removeResults" class="btn btn-default" onclick="removeSearchResults()">Очистить результаты
+                поиска
+            </button>
+            <!--<button class="btn btn-default disabled" onclick="">Отправить результаты на почту</button>-->
+        </div>
+        <div id="results-info">
+            <h3>Статус поиска: <span id="search-status" class="label label-primary">Готов к запуску поиска</span>
+            </h3>
 
-
-    <div id="items-container">
-
-
+            <p>Количество найденных результатов: <span id="full-items-count" class="badge">0</span></p>
+        </div>
     </div>
+</div>
+
+
+<h2>Результаты поиска закупок и заказов</h2>
+
+
+<div id="items-container">
+
+
+</div>
 </div>
 
 
@@ -339,7 +427,7 @@ function startSearch() {
             setOptionalParams();
             se.findItemsForKeywords(keywords, regions).done(function () {
                 removeDuplicates();
-                removeIgnored().done(function(){
+                removeIgnored().done(function () {
                     generateIgnoreButtons();
                     se.refreshResultsCount();
                     showFinishStatus();

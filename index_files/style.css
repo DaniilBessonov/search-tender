@@ -19,11 +19,6 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     outline: 0;
 }
 
-html, body {
-    height: 100%;
-    min-width: 1100px; /* to keep header nowrap */
-}
-
 body {
     font: normal 14px Tahoma, Geneva, sans-serif;
 }
