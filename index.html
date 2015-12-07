@@ -520,9 +520,9 @@ function setOptionalParams() {
 }
 
 function generateKeywordsContainers() {
-    $.each(g_keywords, function (i, key) {
+/*    $.each(g_keywords, function (i, key) {
         generateKeywordContainer(key);
-    });
+    });*/
     db.getKeywords().done(function (keywords) {
         $.each(keywords, function (i, key) {
             generateKeywordContainer(key);
