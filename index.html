@@ -57,10 +57,6 @@
             float: none;
         }
 
-        button {
-            margin-right: 10px;
-        }
-
         #items-container {
             padding-top: 20px;
             font: normal 14px Tahoma, Geneva, sans-serif;
@@ -77,8 +73,11 @@
         }
 
         #data-container .input-group {
-            max-width: 350px;
+            max-width: 420px;
             margin-top: 10px;
+        }
+        #price-container .input-group {
+            max-width: 500px;
         }
 
         #data-container .input-group > span {
@@ -88,6 +87,8 @@
         .ignore-btn {
             margin-top: 10px;
         }
+
+
     </style>
 
 </head>
@@ -176,17 +177,19 @@
                 <div class="input-group">
                     <span class="input-group-addon">Дата начала</span>
                     <input id="orderPublishDateFrom" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </div>
                 </div>
 
                 <div class="input-group">
                     <span class="input-group-addon">Дата конца</span>
                     <input id="orderPublishDateTo" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6">
@@ -195,16 +198,18 @@
                 <div class="input-group">
                     <span class="input-group-addon">Дата начала</span>
                     <input id="orderUpdateDateFrom" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </div>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">Дата конца</span>
                     <input id="orderUpdateDateTo" type="text" class="form-control" placeholder="дата">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
-                    </span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" onclick="$(this).parent().prev().val('')">Очистить <span class="glyphicon glyphicon-remove"></span></button>
+                        <button class="btn btn-default btn-data-picker" type="button">Указать дату</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -268,14 +273,6 @@ if (typeof console == "undefined") {
 
 var se = new SearchEngine();
 var db = new DBEngine();
-
-$(document).ready(function () {
-    generateKeywordsContainers();
-    //$("#keywords-container input[type='checkbox']:checked").prop("checked", false); //TODO for tests
-    initDataPicker();
-    setTodayDate();
-});
-
 var g_keywords = [
     'сигнализация',
     'охранно-пожарной сигнализации',
@@ -296,6 +293,14 @@ var g_keywords = [
 
     'видеонаблюдение',
     'видеокамеры'];
+
+
+$(document).ready(function () {
+    generateKeywordsContainers();
+    $("#keywords-container input[type='checkbox']:checked").prop("checked", false); //TODO for tests
+    initDataPicker();
+    setTodayDate();
+});
 
 function initDataPicker() {
     var dataPicker = $('.btn-data-picker');
@@ -318,6 +323,7 @@ function startSearch() {
         if (keywords.length == 0 || regions.length == 0) {
             alert("Ошибка. Не выбраны параметры для поиска!");
         } else {
+            $("#items-container").children().remove();
             showProgressStatus();
             disableControls();
             setOptionalParams();
@@ -388,6 +394,7 @@ function setOptionalParams() {
         orderPriceFrom: $("#orderPriceFrom").val(),
         orderPriceTo: $("#orderPriceTo").val()
     };
+    console.log("Optional params:", se.optionalParams);
 }
 
 function generateKeywordsContainers() {
